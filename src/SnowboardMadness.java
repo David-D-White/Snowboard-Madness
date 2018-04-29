@@ -37,6 +37,10 @@ public class SnowboardMadness extends PApplet
     {
 	background(255);
 	frameRate(60);
+	surface.setTitle("Snowboard Madness");
+	PImage icon = loadImage("resources/Icon.png");
+	surface.setIcon(icon);
+	
 	// Menus
 	menus = new UI(this);
 	// Load Images
