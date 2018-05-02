@@ -15,8 +15,8 @@ public class SnowboardMadness extends PApplet
     // obstacles
     ArrayList<Obstacle> obstacles, trees;
     final int OBSTACLE_WIDTH = 200, TREE_WIDTH = 360, I_TREE_HEIGHT = 110, I_OBST_HEIGHT = 140;
-    int treeSpawnSpeed = 7, treeSpawn = treeSpawnSpeed, treeCount = treeSpawn;
-    int obstSpawnSpeed = 3, obstSpawn = obstSpawnSpeed, obstCount = obstSpawn;
+    float treeSpawnSpeed = 6, treeSpawn, treeCount;
+    float obstSpawnSpeed = 3.5f, obstSpawn, obstCount;
     // player
     Player player;
     // Lanes
@@ -28,6 +28,10 @@ public class SnowboardMadness extends PApplet
     int gameState = 0;
     UI menus;
 
+    // Delta Time
+    double oldTime, newTime, deltaTime;
+    double maxDelta = 1.0 / 30;
+
     public void settings()
     {
 	size(480, 720);
@@ -36,11 +40,11 @@ public class SnowboardMadness extends PApplet
     public void setup()
     {
 	background(255);
-	frameRate(60);
+	frameRate(240);
 	surface.setTitle("Snowboard Madness");
 	PImage icon = loadImage("resources/Icon.png");
 	surface.setIcon(icon);
-	
+
 	// Menus
 	menus = new UI(this);
 	// Load Images
@@ -72,10 +76,17 @@ public class SnowboardMadness extends PApplet
 	imageMode(CENTER);
 	textAlign(CENTER);
 	noStroke();
+
+	oldTime = System.nanoTime() / 1000000000.0;
     }
 
     public void draw()
     {
+	newTime = System.nanoTime() / 1000000000.0;
+	deltaTime = newTime - oldTime;
+	oldTime = newTime;
+	deltaTime = Math.min(deltaTime, maxDelta);
+	
 	// snow
 	background(250);
 	// sky
@@ -137,24 +148,23 @@ public class SnowboardMadness extends PApplet
 
     public void speedCalc()
     {
-	Obstacle.accel = (float) (1.025 + ((int) score.score() * 0.01) * 0.001);
+	Obstacle.accel = (float) (5 + pow(score.score() * 0.002f, 2));
 
 	float a = log(Obstacle.accel);
 	float b = a / Obstacle.iVel;
 	a = 1 / a;
 	float t = log((height - I_TREE_HEIGHT) * b) * a / treeSpawnSpeed;
-	treeSpawn = (int) t;
+	treeSpawn = (float) t;
 
 	t = log((height - I_OBST_HEIGHT) * b) * a / obstSpawnSpeed;
-	obstSpawn = (int) t;
+	obstSpawn = (float) t;
     }
 
     public void spawnObstacles()
     {
-	obstCount--;
 	if (obstCount <= 0)
 	{
-	    obstCount = obstSpawn;
+	    obstCount += obstSpawn;
 	    int pos1, pos2;
 	    pos1 = (int) random(0, 3);
 	    pos2 = (int) random(0, 3);
@@ -164,6 +174,10 @@ public class SnowboardMadness extends PApplet
 	    {
 		temp.addPair(obstLanes[pos2]);
 	    }
+	}
+	else
+	{
+	    obstCount -= deltaTime;
 	}
 	score.draw();
 	for (int i = 0; i < obstacles.size(); i++)
@@ -177,14 +191,17 @@ public class SnowboardMadness extends PApplet
     }
 
     public void spawnTrees()
-    {
-	treeCount--;
+    {	
 	if (treeCount <= 0)
 	{
-	    treeCount = treeSpawn;
+	    treeCount += treeSpawn;
 	    Obstacle temp = new Obstacle(this, outerRightLane, I_TREE_HEIGHT, tree[(int) random(0, 2)], false);
 	    trees.add(temp);
 	    temp.addPair(outerLeftLane);
+	}
+	else
+	{
+	    treeCount -= deltaTime;
 	}
     }
 

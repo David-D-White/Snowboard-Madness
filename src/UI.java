@@ -54,6 +54,8 @@ public class UI
 		canvas.score.reset();
 		canvas.player.resetCooldown();
 		canvas.obstacles.clear();
+		canvas.trees.clear();
+		canvas.speedCalc();
 		if (i == 0)
 		{
 		    canvas.gameState = 1;

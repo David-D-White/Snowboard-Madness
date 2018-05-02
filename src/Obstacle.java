@@ -8,7 +8,8 @@ public class Obstacle
     private float posX, posY, width, height, velY, heightProportion;
     private Obstacle pair;
     private boolean givePoints;
-    public static float accel = (float) 1.025, iVel = 0.4f;
+    private float _accel;
+    public static float accel = (float) 5, iVel = 15f;
 
     public Obstacle(SnowboardMadness canvas, Line[] lanes, float posY, PImage sprite, boolean givePoints)
     {
@@ -23,6 +24,8 @@ public class Obstacle
 	height = sprite.height;
 	this.sprite = sprite;
 	heightProportion = (float) sprite.height / sprite.width;
+	
+	_accel = accel;
 
 	this.givePoints = givePoints;
     }
@@ -35,7 +38,7 @@ public class Obstacle
 
     public void move()
     {
-	posY += velY;
+	posY += velY * canvas.deltaTime;
 	if (posY >= canvas.height + sprite.height / 2 || posX <= 0 - width / 2 || posX >= canvas.width + width / 2)
 	{
 	    if (givePoints && canvas.gameState == 1)
@@ -48,7 +51,7 @@ public class Obstacle
 	width = Math.abs(lanes[0].getX(posY) - lanes[2].getX(posY));
 	height = width * heightProportion;
 	posX = lanes[1].getX(posY);
-	velY *= accel;
+	velY *= Math.pow(_accel, canvas.deltaTime);
 	if (pair != null)
 	{
 	    pair.posY = posY;
