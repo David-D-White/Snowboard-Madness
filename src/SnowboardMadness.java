@@ -1,15 +1,21 @@
 import java.awt.Color;
 import java.util.ArrayList;
+
+import com.jogamp.opengl.GL;
+
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
+import processing.opengl.PJOGL;
 
 public class SnowboardMadness extends PApplet
 {
     // SkyColour
     int sky = new Color(94, 215, 255).getRGB();
-    // Images
+    // Images & fonts.
     PImage rock, boardLive, boardDead;
     PImage[] tree, board;
+    PFont buttonFont, titleFont;
     // perspective
     final int VANISH_X = 240, VANISH_Y = 60;
     // obstacles
@@ -34,16 +40,25 @@ public class SnowboardMadness extends PApplet
 
     public void settings()
     {
-	size(480, 720);
+	size(480, 720, P2D);
+	PJOGL.setIcon("resources/Icon.png");
     }
 
     public void setup()
     {
+	beginPGL();
 	background(255);
 	frameRate(240);
+	fill(0);
+	rect(0, 0, width, height);
+	redraw();
 	surface.setTitle("Snowboard Madness");
-	PImage icon = loadImage("resources/Icon.png");
-	surface.setIcon(icon);
+	buttonFont = createFont("resources/Minecraftia-Regular.ttf", 18);
+	background(0);
+	redraw();
+	titleFont = createFont("resources/Minecraftia-Regular.ttf", 40);
+	background(255);
+	redraw();
 
 	// Menus
 	menus = new UI(this);
@@ -51,10 +66,14 @@ public class SnowboardMadness extends PApplet
 	board = new PImage[]
 	{ loadImage(".//resources/Player/BoardLeft.png"), loadImage(".//resources/Player/Board.png"), loadImage(".//resources/Player/BoardRight.png") };
 	rock = loadImage(".//resources/Rock.png");
+	background(0);
+	redraw();
 	tree = new PImage[]
 	{ loadImage(".//resources/Trees/Tree1.png"), loadImage(".//resources/Trees/Tree2.png") };
 	boardLive = loadImage(".//resources/Lives/Alive.png");
 	boardDead = loadImage(".//resources/Lives/Dead.png");
+	background(255);
+	redraw();
 	// Load Lanes
 	for (int i = 0; i < 3; i++)
 	{
@@ -68,9 +87,9 @@ public class SnowboardMadness extends PApplet
 	obstacles = new ArrayList<Obstacle>();
 	trees = new ArrayList<Obstacle>();
 	// add player
-	player = new Player(this, board, 1, 60);
+	player = new Player(this, board, 1, 1.2f);
 	// add score
-	score = new ScoreBoard(this, 4, boardLive, boardDead);
+	score = new ScoreBoard(this, 4, boardLive, boardDead, titleFont);
 	speedCalc();
 
 	imageMode(CENTER);
@@ -86,7 +105,7 @@ public class SnowboardMadness extends PApplet
 	deltaTime = newTime - oldTime;
 	oldTime = newTime;
 	deltaTime = Math.min(deltaTime, maxDelta);
-	
+
 	// snow
 	background(250);
 	// sky
@@ -115,7 +134,7 @@ public class SnowboardMadness extends PApplet
 	// Only while game running
 	if (gameState == 1)
 	{
-	    player.move();
+	    player.move((float) deltaTime);
 	    player.draw();
 	    for (int i = 0; i < obstacles.size(); i++)
 	    {
@@ -191,7 +210,7 @@ public class SnowboardMadness extends PApplet
     }
 
     public void spawnTrees()
-    {	
+    {
 	if (treeCount <= 0)
 	{
 	    treeCount += treeSpawn;

@@ -9,10 +9,10 @@ public class Player
     private PImage[] player;
     private SnowboardMadness canvas;
     private int pKeyCode;
-    private int cooldownTime, cooldownState;
+    private float cooldownTime, cooldownState;
     private ArrayList<Particle> particles;
 
-    public Player(SnowboardMadness canvas, PImage[] player, int relPos, int cooldownTime)
+    public Player(SnowboardMadness canvas, PImage[] player, int relPos, float cooldownTime)
     {
 	width = player[relPos].width;
 	height = player[relPos].height;
@@ -26,7 +26,7 @@ public class Player
     // ----------Behaviours----------//
     public void draw()
     {
-	if (cooldownState % 8 == 0)
+	if ((int) (cooldownState * 12) %2 == 0)
 	{
 	    canvas.image(player[relPos], posX, posY);
 	}
@@ -36,7 +36,7 @@ public class Player
 	}
     }
 
-    private void update()
+    private void update(float deltaTime)
     {
 	// Update position based on keyStroke
 	if (canvas.keyPressed && pKeyCode != canvas.keyCode)
@@ -63,7 +63,7 @@ public class Player
 	}
 	if (cooldownState > 0)
 	{
-	    cooldownState--;
+	    cooldownState-= deltaTime;
 	}
 	for (int i = 0; i < 4; i++)
 	{
@@ -73,9 +73,9 @@ public class Player
 	}
     }
 
-    public void move()
+    public void move(float deltaTime)
     {
-	update();
+	update(deltaTime);
 	posX = 160 * relPos + 80;
 	posY = canvas.height - height / 2;
     }

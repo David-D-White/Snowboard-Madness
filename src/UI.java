@@ -15,12 +15,12 @@ public class UI
 	gameOverButtons = new ArrayList<Button>();
 	gameOverLabels = new ArrayList<Label>();
 	// Create menu
-	menuLabels.add(new Label(canvas, "Snowboard", canvas.width / 2, 100, 50, Color.BLUE));
-	menuLabels.add(new Label(canvas, "Madness", canvas.width / 2, 150, 50, Color.BLUE));
+	menuLabels.add(new Label(canvas, "Snowboard", canvas.width / 2, 100, canvas.titleFont, Color.BLUE));
+	menuLabels.add(new Label(canvas, "Madness", canvas.width / 2, 150, canvas.titleFont, Color.BLUE));
 	menuButtons.add(new Button(canvas, canvas.width / 2, 260, 120, 40, new Color(150, 150, 150), new Color(220, 220, 220), "New Game"));
 	menuButtons.add(new Button(canvas, canvas.width / 2, 320, 120, 40, new Color(150, 150, 150), new Color(220, 220, 220), "Quit"));
 	// Create gameOver
-	gameOverLabels.add(new Label(canvas, "GAME OVER", canvas.width / 2, 220, 50, Color.BLUE));
+	gameOverLabels.add(new Label(canvas, "GAME OVER", canvas.width / 2, 220, canvas.titleFont, Color.BLUE));
 	gameOverButtons.add(new Button(canvas, canvas.width / 2 - 80, 280, 120, 40, new Color(150, 150, 150), new Color(220, 220, 220), "Play Again"));
 	gameOverButtons.add(new Button(canvas, canvas.width / 2 + 80, 280, 120, 40, new Color(150, 150, 150), new Color(220, 220, 220), "Menu"));
     }

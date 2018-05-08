@@ -1,26 +1,28 @@
 import java.awt.Color;
 import processing.core.PApplet;
+import processing.core.PFont;
 
 public class Label 
 {
 	private PApplet canvas;
 	private Color colour;
 	private String text;
-	private int posX, posY, size;
+	private int posX, posY;
+	private PFont font;
 	
-	public Label (PApplet canvas, String text, int posX, int posY, int size, Color colour)
+	public Label (PApplet canvas, String text, int posX, int posY, PFont font, Color colour)
 	{
 		this.canvas = canvas;
 		this.text = text;
 		this.posX = posX;
 		this.posY = posY;
-		this.size = size;
+		this.font = font;
 		this.colour = colour;
 	}
 	
 	public void draw ()
 	{
-		canvas.textSize(size);
+		canvas.textFont(font);
 		canvas.fill(colour.getRGB());
 		canvas.text(text, posX, posY);
 	}

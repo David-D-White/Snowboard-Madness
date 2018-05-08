@@ -1,18 +1,16 @@
 import java.awt.Color;
 
-import processing.core.PApplet;
-
 public class Button 
 {
 	private boolean clickState,heldState;
 	private float posX, posY, width, height;
 	private Color on, off;
 	private String label;
-	private PApplet canvas;
+	private SnowboardMadness canvas;
 	private long resetTime, clickedTime;
 	private int textSize;
 	
-	public Button (PApplet canvas, float posX, float posY, float width, float height, 
+	public Button (SnowboardMadness canvas, float posX, float posY, float width, float height, 
 			Color on, Color off, String label)
 	{
 		this.canvas = canvas;
@@ -23,7 +21,7 @@ public class Button
 		this.on = on;
 		this.off = off;
 		this.label = label;
-		textSize = (int) (height/2);
+		textSize = canvas.buttonFont.getSize();
 		resetTime = 100;
 	}
 	//----------Behaviours----------//
@@ -34,7 +32,7 @@ public class Button
 	
 	public boolean held()
 	{
-		return (hover() && canvas.mousePressed && canvas.mouseButton == PApplet.LEFT);
+		return (hover() && canvas.mousePressed && canvas.mouseButton == canvas.LEFT);
 	}
 	
 	public boolean clicked()
@@ -84,16 +82,16 @@ public class Button
 		{
 			canvas.fill(off.getRGB());
 		}
-		canvas.rectMode(PApplet.CENTER);
+		canvas.rectMode(canvas.CENTER);
 		canvas.strokeWeight(4);
 		canvas.stroke(50);
 		canvas.rect(posX,  posY, width, height);
 		canvas.strokeWeight(0);
-		canvas.rectMode(PApplet.CORNER);
+		canvas.rectMode(canvas.CORNER);
 		canvas.fill(0);
 		canvas.noStroke();
-		canvas.textSize(textSize);
-		canvas.text(label, posX, posY+textSize/2);
+		canvas.textFont(canvas.buttonFont,textSize);
+		canvas.text(label, posX, posY+textSize);
 	}
 	
 	//----------Accessors----------//

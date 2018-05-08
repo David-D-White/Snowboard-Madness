@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 
 public class ScoreBoard
@@ -6,14 +7,15 @@ public class ScoreBoard
     private int score, start_lives, lives;
     private PApplet screen;
     private PImage live, dead;
+    private PFont font;
 
-    public ScoreBoard(PApplet screen, int start_lives, PImage live, PImage dead)
+    public ScoreBoard(PApplet screen, int start_lives, PImage live, PImage dead, PFont font)
     {
 	this.screen = screen;
 	this.start_lives = start_lives;
 	this.live = live;
 	this.dead = dead;
-	lives = start_lives;
+	this.font = font;
 	lives = start_lives;
     }
 
@@ -42,8 +44,8 @@ public class ScoreBoard
     {
 	screen.fill(255, 0, 0);
 	screen.textAlign(screen.LEFT);
-	screen.textSize(32);
-	screen.text(score, 16, 32);
+	screen.textFont(font, 32);
+	screen.text(score, 6, 54);
 	screen.textAlign(screen.CENTER);
 	for (int i = 0; i < start_lives; i++)
 	{
